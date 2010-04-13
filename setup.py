@@ -10,5 +10,6 @@ setup(name='ganglia_iptables',
         author='Lars Kellogg-Stedman',
         author_email='lars@seas.harvard.edu',
         packages=['ganglia_iptables'],
+        scripts=['iptables.py'],
         )
 

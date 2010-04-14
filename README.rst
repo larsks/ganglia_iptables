@@ -42,6 +42,10 @@ appropriate definitions by running ``iptables.py`` with the ``-m`` option::
 
   python /usr/lib/ganglia/python_modules/iptables.py -m
 
+NB: Running ``iptables.py`` directly will not parse your config file.  You
+can use the ``-o parameter=value`` command line option to provide
+configuration parameters.
+
 Marking iptables rules
 ======================
 

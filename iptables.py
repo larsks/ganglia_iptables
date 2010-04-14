@@ -11,6 +11,9 @@ import ganglia_iptables.monitor
 MONITOR = None
 
 def metric_init(params):
+    '''This is the entry point from Gmond.  Instantiates a new
+    IptablesMonitor and starts the monitoring thread.'''
+
     global MONITOR
 
     logging.basicConfig(
@@ -26,6 +29,8 @@ def metric_init(params):
     return MONITOR.descriptors
 
 def metric_cleanup():
+    '''Shuts down the monitoring thread.'''
+
     MONITOR.shutdown()
 
 def parse_args():
@@ -36,6 +41,10 @@ def parse_args():
     return p.parse_args()
 
 def main():
+    '''This is the entry point when run from the command line.  Set up a
+    basic set of parameters, initialize the module, and then display values
+    indefinately.'''
+
     opts, args = parse_args()
 
     options = {

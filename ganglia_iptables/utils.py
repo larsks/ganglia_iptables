@@ -7,9 +7,11 @@ IPTABLES = '/sbin/iptables'
 RE_LABEL = re.compile('.* monitor:(?P<label>\S+) .*')
 
 class Rater (object):
-    '''Calculates a moving rate.'''
+    '''Calculates rate over a given number of samples.'''
 
-    def __init__ (self, name, numsamples):
+    def __init__ (self, numsamples, name=None):
+        '''name is optional and is only meant for debugging purposes.'''
+
         self.name = name
         self.numsamples = numsamples
         self.samples = []

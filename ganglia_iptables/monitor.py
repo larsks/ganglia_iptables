@@ -34,10 +34,13 @@ class IptablesMonitor (threading.Thread):
         self.iptables = utils.IPTables(params.get('IptablesCommand',
             DEFAULTS['IptablesCommand']))
 
-        self._last = {}
         self.descriptors = []
         self.metrics = {}
+
+        # This is used internally while collecting metrics.
         self._rates = {}
+
+        # This is what is actually exposed to Ganglia.
         self.rates = {}
 
         super(IptablesMonitor, self).__init__()
@@ -46,12 +49,17 @@ class IptablesMonitor (threading.Thread):
         self.initialize()
 
     def initialize(self):
+        '''Discover available metrics and initialize _rates with
+        corresponding Rater objects.'''
+
         self.logger.info('Initializing rate table.')
         for d in self.descriptors:
             self.logger.debug('Initializing %(name)s.' % d)
-            self._rates[d['name']] = utils.Rater(d['name'], self.windowsize)
+            self._rates[d['name']] = utils.Rater(self.windowsize, d['name'])
 
     def shutdown (self):
+        '''Shutdown the monitoring thread.'''
+
         self.logger.info('Shutting down.')
         self.shuttingDown = True
         self.runcon.clear()
@@ -62,6 +70,8 @@ class IptablesMonitor (threading.Thread):
     def run (self):
         self.logger.info('Monitor thread starting.')
         self.running = True
+
+        # Notify any threads waiting for us to start.
         self.runcon.set()
 
         while not self.shuttingDown:
@@ -73,6 +83,9 @@ class IptablesMonitor (threading.Thread):
         self.running = False
 
     def update_metrics(self):
+        '''Iterate over specified chains looking for metrics, then update
+        rate table with the results.'''
+
         self.logger.info('Updating metrics.')
         for chain in self.chains:
             for metric in self.iptables.parse_accounting_chain(chain):
@@ -91,6 +104,9 @@ class IptablesMonitor (threading.Thread):
         self.lock.release()
                     
     def discover_metrics (self):
+        '''Discover available metrics and build the descriptor table for
+        Gmond.'''
+
         self.logger.info('Discovering available metrics.')
         for chain in self.chains:
             for metric in self.iptables.parse_accounting_chain(chain):
@@ -121,6 +137,9 @@ class IptablesMonitor (threading.Thread):
                 self.descriptors.extend(self.metrics[metric['label']])
 
     def metric_get(self, name):
+        '''This is the callback defined in all metric descriptors.  Return
+        a value to gmond.'''
+
         self.logger.debug('Servicing request for %s.' % name)
 
         if not self.running and not self.shuttingDown:

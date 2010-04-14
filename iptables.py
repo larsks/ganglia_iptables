@@ -61,9 +61,10 @@ def main():
     try:
         descriptors = metric_init(options)
 
+        # If -m was specified, just dump the metric definitions and exit.
         if opts.metrics:
             for d in descriptors:
-                print 'metric {\n\tname = "%(name)s"\n\tvalue_threshold = 1.0\n}' % d
+                print '\tmetric {\n\t\tname = "%(name)s"\n\t\tvalue_threshold = 1.0\n\t}' % d
 
             raise KeyboardInterrupt
 

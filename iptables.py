@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import logging
 
 import ganglia_iptables.monitor
 
@@ -10,6 +11,11 @@ MONITOR = None
 
 def metric_init(params):
     global MONITOR
+
+    logging.basicConfig(
+            filename=params.get('Logfile'),
+            format='%(asctime)s %(name)s %(levelname)s: %(message)s',
+            level=logging.INFO)
 
     MONITOR = ganglia_iptables.monitor.IptablesMonitor(params)
     MONITOR.start()

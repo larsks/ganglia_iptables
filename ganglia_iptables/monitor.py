@@ -23,7 +23,10 @@ class IptablesMonitor (threading.Thread):
             DEFAULTS['RefreshRate']))
         self.windowsize = int(self.params.get('WindowSize',
             DEFAULTS['WindowSize']))
-        self.debug = self.params.get('Debug', None)
+
+        self.logger = logging.getLogger('IptablesMonitor')
+        self.logger.setLevel(getattr(logging, self.params.get('LogLevel',
+            'INFO')))
 
         self.running = False
         self.shuttingDown = False
@@ -45,10 +48,13 @@ class IptablesMonitor (threading.Thread):
         self.initialize()
 
     def initialize(self):
+        self.logger.info('Initializing rate table.')
         for d in self.descriptors:
+            self.logger.debug('Initializing %(name)s.' % d)
             self._rates[d['name']] = utils.Rater(d['name'], self.windowsize)
 
     def shutdown (self):
+        self.logger.info('Shutting down.')
         self.shuttingDown = True
         self.runcon.clear()
         if not self.running:
@@ -56,14 +62,11 @@ class IptablesMonitor (threading.Thread):
         self.join()
 
     def run (self):
-        if self.debug:
-            print >>sys.stderr, '+ Thread starting.'
+        self.logger.info('Monitor thread starting.')
         self.running = True
         self.runcon.set()
 
         while not self.shuttingDown:
-            if self.debug:
-                print >>sys.stderr, '+ Top of loop.'
             self.update_metrics()
 
             if not self.shuttingDown:
@@ -72,25 +75,28 @@ class IptablesMonitor (threading.Thread):
         self.running = False
 
     def update_metrics(self):
+        self.logger.info('Updating metrics.')
         for chain in self.chains:
             for metric in self.iptables.parse_accounting_chain(chain):
                 if metric['label'] in self.metrics:
                     for t in [ 'packets', 'bytes' ]:
                         name = '%s_%s' % (metric['label'], t)
 
-                        if self.debug:
-                            print >>sys.stderr, '+ updating %s = %s' % (name,
-                                    metric[t])
+                        self.logger.debug('Updating %s = %s' %
+                                (name, metric[t]))
                         self._rates[name].add(int(metric[t]))
 
         self.lock.acquire()
+        self.logger.debug('Updating rates for Ganglia.')
         for k,v in self._rates.items():
             self.rates[k] = v.rate()
         self.lock.release()
                     
     def discover_metrics (self):
+        self.logger.info('Discovering available metrics.')
         for chain in self.chains:
             for metric in self.iptables.parse_accounting_chain(chain):
+                self.logger.debug('Found metric %(label)s.' % metric)
                 self.metrics[metric['label']] = (
                         {
                             'name': '%s_packets' % metric['label'],
@@ -117,6 +123,8 @@ class IptablesMonitor (threading.Thread):
                 self.descriptors.extend(self.metrics[metric['label']])
 
     def metric_get(self, name):
+        self.logger.info('Servicing request for %s.' % name)
+
         if not self.running and not self.shuttingDown:
             self.start()
 

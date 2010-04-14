@@ -36,6 +36,12 @@ IptablesCommand (default /sbin/iptables)
   /sbin/iptables" and making the appropriate changes to your
   ``/etc/sudoers`` file.
 
+You will need to add the necessary ``metric`` definitions to the
+``collection_group`` in the configuration file.  You can generate
+appropriate definitions by running ``iptables.py`` with the ``-m`` option::
+
+  python /usr/lib/ganglia/python_modules/iptables.py -m
+
 Marking iptables rules
 ======================
 

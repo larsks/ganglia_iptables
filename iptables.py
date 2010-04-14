@@ -37,6 +37,7 @@ def parse_args():
     p = optparse.OptionParser()
     p.add_option('-d', '--debug', action='store_true')
     p.add_option('-o', '--option', action='append', default=[])
+    p.add_option('-m', '--metrics', action='store_true')
 
     return p.parse_args()
 
@@ -59,6 +60,13 @@ def main():
 
     try:
         descriptors = metric_init(options)
+
+        if opts.metrics:
+            for d in descriptors:
+                print 'metric {\n\tname = "%(name)s"\n\tvalue_threshold = 1.0\n}' % d
+
+            raise KeyboardInterrupt
+
         while True:
             for d in descriptors:
                 v = d['call_back'](d['name'])

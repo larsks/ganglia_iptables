@@ -1,5 +1,5 @@
 Name:		ganglia-plugin-iptables
-Version:	20100413.1
+Version:	20100413.2
 Release:	1%{?dist}
 Summary:	iptables plugin for ganglia.
 

@@ -25,8 +25,6 @@ class IptablesMonitor (threading.Thread):
             DEFAULTS['WindowSize']))
 
         self.logger = logging.getLogger('IptablesMonitor')
-        self.logger.setLevel(getattr(logging, self.params.get('LogLevel',
-            'INFO')))
 
         self.running = False
         self.shuttingDown = False
@@ -123,7 +121,7 @@ class IptablesMonitor (threading.Thread):
                 self.descriptors.extend(self.metrics[metric['label']])
 
     def metric_get(self, name):
-        self.logger.info('Servicing request for %s.' % name)
+        self.logger.debug('Servicing request for %s.' % name)
 
         if not self.running and not self.shuttingDown:
             self.start()

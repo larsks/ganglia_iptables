@@ -5,7 +5,7 @@ Summary:	iptables plugin for ganglia.
 
 Group:		SEAS
 License:	SEAS
-Source0:	ganglia_iptables-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:	python
@@ -17,7 +17,7 @@ Requires:	ganglia-gmond
 iptables plugin for ganglia.
 
 %prep
-%setup -q -n ganglia_iptables-%{version}
+%setup -q
 
 %build
 python setup.py build

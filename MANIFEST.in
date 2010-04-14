@@ -1,4 +1,4 @@
 include README.rst
-include ganglia_iptables.spec
+include ganglia-plugin-iptables.spec
 include iptables.pyconf.sample
 

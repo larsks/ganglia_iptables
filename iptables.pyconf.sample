@@ -3,7 +3,10 @@ modules {
     name = "iptables"
     language = "python"
     param RefreshRate {
-        value = 60
+        value = 10
+    }
+    param WindowSize {
+        value = 6
     }
   }
 }
@@ -11,55 +14,22 @@ modules {
 collection_group {
   collect_every = 10
   time_threshold = 20
-  metric {
-    name = "http_in_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "http_in_pkts"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "http_out_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "http_out_pkts"
-    value_threshold = 1.0
-  }
 
-  metric {
-    name = "https_in_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "https_in_pkts"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "https_out_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "https_out_pkts"
-    value_threshold = 1.0
-  }
-
-  metric {
-    name = "ssh_in_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "ssh_in_pkts"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "ssh_out_bytes"
-    value_threshold = 1.0
-  }
-  metric {
-    name = "ssh_out_pkts"
-    value_threshold = 1.0
-  }
+#  metric {
+#    name = "http_in_bytes"
+#    value_threshold = 1.0
+#  }
+#  metric {
+#    name = "http_out_bytes"
+#    value_threshold = 1.0
+#  }
+#  metric {
+#    name = "https_in_bytes"
+#    value_threshold = 1.0
+#  }
+#  metric {
+#    name = "https_out_bytes"
+#    value_threshold = 1.0
+#  }
 }
 

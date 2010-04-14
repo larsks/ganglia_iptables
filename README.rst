@@ -15,26 +15,26 @@ This module is configured via the ``iptables.pyconf`` file, possibly
 located in ``/etc/ganglia/conf.d``.  The module supports the following
 parameters:
 
-  LogFile
-    Send logging to the specified file instead of stderr.
+LogFile
+  Send logging to the specified file instead of stderr.
 
-  LogLevel (default INFO)
-    What to log.
+LogLevel (default INFO)
+  What to log.
 
-  AccountingChains (default acctin,acctout)
-    A comma-separated list of iptables chains to search for marked rules.
+AccountingChains (default acctin,acctout)
+  A comma-separated list of iptables chains to search for marked rules.
 
-  RefreshRate (default 10)
-    How often to poll iptables for new byte/packet counts.
+RefreshRate (default 10)
+  How often to poll iptables for new byte/packet counts.
 
-  WindowSize (default 6)
-    Over how many samples to calculate rate information.
+WindowSize (default 6)
+  Over how many samples to calculate rate information.
 
-  IptablesCommand (default /sbin/iptables)
-    Command used to run iptables.  If you're running gmond as user
-    ``nobody``, you may want to change this to "/usr/bin/sudo
-    /sbin/iptables" and making the appropriate changes to your
-    ``/etc/sudoers`` file.
+IptablesCommand (default /sbin/iptables)
+  Command used to run iptables.  If you're running gmond as user
+  ``nobody``, you may want to change this to "/usr/bin/sudo
+  /sbin/iptables" and making the appropriate changes to your
+  ``/etc/sudoers`` file.
 
 Marking iptables rules
 ======================

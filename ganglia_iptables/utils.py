@@ -2,6 +2,7 @@ import sys
 import re
 import subprocess
 import time
+import logging
 
 IPTABLES = '/sbin/iptables'
 RE_LABEL = re.compile('.* monitor:(?P<label>\S+) .*')
@@ -30,7 +31,7 @@ class Rater (object):
         except (IndexError, ZeroDivisionError):
             r = 0
         self.logger.debug('%s: %s | %s' % (self.name,
-            ' '.join(self.samples), r)
+            ' '.join([str(x[0]) for x in self.samples]), r))
 
         return r
 

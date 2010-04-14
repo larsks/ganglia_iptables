@@ -16,6 +16,7 @@ class Rater (object):
         self.numsamples = numsamples
         self.samples = []
         self.total = 0
+        self.logger = logging.getLogger('Rater')
 
     def add (self, v):
         if len(self.samples) == self.numsamples:
@@ -28,6 +29,8 @@ class Rater (object):
             r = (self.samples[-1][0]-self.samples[0][0])/(self.samples[-1][1] - self.samples[0][1])
         except (IndexError, ZeroDivisionError):
             r = 0
+        self.logger.debug('%s: %s | %s' % (self.name,
+            ' '.join(self.samples), r)
 
         return r
 

@@ -115,7 +115,7 @@ class IptablesMonitor (threading.Thread):
                         {
                             'name': '%s_packets' % metric['label'],
                             'call_back': self.metric_get,
-                            'time_max': 20,
+                            'time_max': self.refresh * 2,
                             'value_type': 'uint',
                             'units': 'Packets',
                             'slope': 'both',
